@@ -1,8 +1,12 @@
 ## Information about me:
-Name: Pavel
+Name: Pavel 
+<br/>
 Surname: Gerasimik
+<br/>
 email: pashagerasimik@mail.ru
+<br/>
 tg: @paha_koha
+<br/>
 # Hometask 1
 ![Image alt](https://github.com/PahaKoha/KrokHomeTasks/blob/master/images/Task1.png)
 # Hometask 2
