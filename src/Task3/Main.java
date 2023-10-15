@@ -33,9 +33,7 @@ public class Main {
     }
 
     public static boolean checkingNumberForPrimality(long n) {
-        if (n < 2) {
-            return false;
-        }
+
         if (n <= 3) {
             return true;
         }
