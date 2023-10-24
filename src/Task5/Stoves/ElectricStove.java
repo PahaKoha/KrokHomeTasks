@@ -25,7 +25,9 @@ public class ElectricStove extends Stove implements ImportProduct {
                 ", price=" + price +
                 ", description='" + description + '\'' +
                 ", dimensions=" + dimensions +
-                ", power=" + power +
+                ", power='" + power + '\'' +
+                ", availabilityOfGuarantee='" + availabilityOfGuarantee() + "'" +
+                ", manufacturerCountry='" + manufacturerCountry() + "'" +
                 '}';
     }
 }
