@@ -2,13 +2,15 @@ package Task4;
 
 public class Main {
     public static void main(String[] args) {
-        arithmeticProgressionSum(args);
+        double sum = arithmeticProgressionSum(args);
+        System.out.println("Arithmetic progression sum = " + sum);
+
     }
 
-    public static void arithmeticProgressionSum(String[] args) {
+    public static double arithmeticProgressionSum(String[] args) {
         if (args.length != 3) {
             System.out.println("Пожалуйста, введите три аргумента: начальный элемент, разность и количество членов прогрессии.");
-            return;
+            return 0;
         }
         double initialNumber = Double.parseDouble(args[0]);
         double difference = Double.parseDouble(args[1]);
@@ -18,6 +20,6 @@ public class Main {
         for (int i = 0; i < n; i++) {
             sum += initialNumber + i * difference;
         }
-        System.out.println("Сумма арифметической прогрессии: " + sum);
+        return sum;
     }
 }
