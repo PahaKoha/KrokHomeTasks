@@ -15,9 +15,9 @@ public class Main {
         System.out.println(annotation1.toString());
         System.out.println("---------------");
         Annotation annotation2 = annotatedImage.findByLabel("First comment");
-        System.out.println(annotation1.toString());
+        System.out.println(annotation2.toString());
         annotation1.moveFigure(10, 2);
-        System.out.println(annotation1.toString());
+        System.out.println(annotation2.toString());
     }
 
     public static Annotation[] getAnnotations() {
