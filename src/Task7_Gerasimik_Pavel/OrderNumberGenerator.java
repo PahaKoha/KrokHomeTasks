@@ -8,7 +8,7 @@ public class OrderNumberGenerator {
     /**
      * This method create order number
      *
-     * @param orderReceiptDate - the late when order was created
+     * @param orderReceiptDate - date when order was created
      * @param userPhoneNumber  - user's phone number
      * @return - order number
      */

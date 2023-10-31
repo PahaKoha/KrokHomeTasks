@@ -14,7 +14,7 @@ public class Order {
     private LocalDateTime orderIssueDate;
     private final String orderCompound;
     private final String clientFullName;
-    private final String clientPhoneNumber;
+    private final String userPhoneNumber;
     private final double price;
     private final Appliance[] productsListInOrder;
     private OrderStatus status;
@@ -23,10 +23,10 @@ public class Order {
         this.orderReceiptDate = LocalDateTime.now();
         this.orderCompound = orderCompound;
         this.clientFullName = clientFullName;
-        this.clientPhoneNumber = clientPhoneNumber;
+        this.userPhoneNumber = clientPhoneNumber;
         this.productsListInOrder = appliances;
         this.price = UsefulTools.getCalculatePrice(getProductsListInOrder());
-        this.orderNumber = OrderNumberGenerator.createOrderNumber(getOrderReceiptDate(), clientPhoneNumber);
+        this.orderNumber = OrderNumberGenerator.createOrderNumber(getOrderReceiptDate(), getUserPhoneNumber());
         this.status = OrderStatus.CREATED;
     }
 
@@ -58,8 +58,8 @@ public class Order {
         return clientFullName;
     }
 
-    public String getClientPhoneNumber() {
-        return clientPhoneNumber;
+    public String getUserPhoneNumber() {
+        return userPhoneNumber;
     }
 
     public Appliance[] getProductsListInOrder() {
