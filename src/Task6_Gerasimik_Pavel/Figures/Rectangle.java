@@ -24,6 +24,10 @@ public class Rectangle extends Figure{
     public int getY1() {
         return y1;
     }
+    @Override
+    public boolean containsPoint(int x, int y) {
+        return (x >= this.x && x <= this.x1) && (y >= this.y && y <= this.y1);
+    }
 
     @Override
     public String toString() {

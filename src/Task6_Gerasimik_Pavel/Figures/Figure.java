@@ -19,6 +19,8 @@ public abstract class Figure implements Movable {
         return y;
     }
 
+    public abstract boolean containsPoint (int x, int t);
+
     @Override
     public void move(int dx, int dy) {
         x += dx;

@@ -18,6 +18,12 @@ public class Circle extends Figure{
     }
 
     @Override
+    public boolean containsPoint(int x, int y) {
+        int distance = (x - this.x) * (x - this.x) + (y - this.y) * (y - this.y);
+        return distance <= this.radius * this.radius;
+    }
+
+    @Override
     public String toString() {
         return "Circle (" + x + ", " + y + "), " + radius;
     }
