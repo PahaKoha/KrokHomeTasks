@@ -1,0 +1,2 @@
+The eighth home task assignment is in a different repository
+https://github.com/mak-42/ws2023spb-knightsmove.git (Task 8 Gerasimik Pavel - PullRequest)

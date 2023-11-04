@@ -1,5 +1,7 @@
 package Task5_Gerasimik_Pavel;
 
+import Task7_Gerasimik_Pavel.UsefulTools;
+
 public abstract class Appliance {
     protected String model;
     protected double price;
@@ -39,7 +41,7 @@ public abstract class Appliance {
     public String toString() {
         return getClass().getSimpleName() + "{" +
                 "model='" + model + '\'' +
-                ", price=" + price +
+                ", price=" + UsefulTools.getFormatPrice(price) +
                 ", description='" + description + '\'' +
                 ", dimensions=" + dimensions +
                 ", power=" + power + ", ";

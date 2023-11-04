@@ -4,27 +4,29 @@ import java.time.LocalDateTime;
 
 import Task5_Gerasimik_Pavel.*;
 
-/**
- * order entity
- */
-public class Order {
+
+public class Order implements OrderManagement{
     private final String orderNumber;
     private final LocalDateTime orderReceiptDate;
     private LocalDateTime orderBuildDate;
     private LocalDateTime orderIssueDate;
-    private final String orderCompound;
-    private final String clientFullName;
+    private final String userFullName;
     private final String userPhoneNumber;
     private final double price;
     private final Appliance[] productsListInOrder;
     private OrderStatus status;
 
-    public Order(String orderCompound, String clientFullName, String clientPhoneNumber, Appliance[] appliances) {
+    public Order(String userFullName, String userPhoneNumber, Appliance[] appliances) {
         this.orderReceiptDate = LocalDateTime.now();
-        this.orderCompound = orderCompound;
-        this.clientFullName = clientFullName;
-        this.userPhoneNumber = clientPhoneNumber;
-        this.productsListInOrder = appliances;
+        this.userFullName = userFullName;
+        this.userPhoneNumber = userPhoneNumber;
+
+        if (appliances.length <= 75) {
+            this.productsListInOrder = appliances;
+        } else {
+            throw new OutOfOrderListException(75);
+        }
+
         this.price = UsefulTools.getCalculatePrice(getProductsListInOrder());
         this.orderNumber = OrderNumberGenerator.createOrderNumber(getOrderReceiptDate(), getUserPhoneNumber());
         this.status = OrderStatus.CREATED;
@@ -50,12 +52,8 @@ public class Order {
         return orderIssueDate;
     }
 
-    public String getOrderCompound() {
-        return orderCompound;
-    }
-
-    public String getClientFullName() {
-        return clientFullName;
+    public String getUserFullName() {
+        return userFullName;
     }
 
     public String getUserPhoneNumber() {
@@ -70,15 +68,29 @@ public class Order {
         return price;
     }
 
-    public void setStatus(OrderStatus status) {
-        this.status = status;
+    @Override
+    public void buildOrder() {
+        if (this.status == OrderStatus.CREATED) {
+            this.status = OrderStatus.COLLECTED;
+            this.orderBuildDate = LocalDateTime.now();
+        }
     }
 
-    public void setOrderBuildDate(LocalDateTime orderBuildDate) {
-        this.orderBuildDate = orderBuildDate;
+    @Override
+    public void issueOrder() {
+        LocalDateTime currentTime = LocalDateTime.now();
+
+        if (status == OrderStatus.COLLECTED && currentTime.isBefore(this.orderBuildDate.plusWeeks(2))) {
+            this.status = OrderStatus.CLOSED;
+            this.orderIssueDate = currentTime;
+        }
     }
 
-    public void setOrderIssueDate(LocalDateTime orderIssueDate) {
-        this.orderIssueDate = orderIssueDate;
+    @Override
+    public void expiredOrder() {
+        if (this.status == OrderStatus.COLLECTED && LocalDateTime.now().isAfter(this.orderBuildDate.plusWeeks(2))) {
+            this.status = OrderStatus.EXPIRED;
+        }
     }
+
 }
