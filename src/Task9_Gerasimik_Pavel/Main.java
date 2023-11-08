@@ -10,8 +10,8 @@ public class Main {
         Set<String> rudeWords = RudeWords.rudeWordsList;
         Set<String> correctWords = CorrectWords.correctWordList;
 
-        Filter filterForIncorrectWords = new Filter(new ToolsForIncorrectWords());
-        Filter filterForRudeWords = new Filter(new ToolsForRudeWords());
+        Filter<ToolsForIncorrectWords> filterForIncorrectWords = new Filter<>(new ToolsForIncorrectWords());
+        Filter<ToolsForRudeWords> filterForRudeWords = new Filter<>(new ToolsForRudeWords());
 
         filterForIncorrectWords.filterComments(comments, correctWords);
         filterForRudeWords.filterComments(comments, rudeWords);
