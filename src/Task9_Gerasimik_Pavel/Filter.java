@@ -15,14 +15,9 @@ public class Filter implements BlackListFilter {
     public void filterComments(List<String> comments, Set<String> blackList) {
         for (int i = 0; i < comments.size(); i++) {
             List<String> words = UsefulTools.getElementsFromComment(comments.get(i));
+            String newComment = wordCorrection.commentsHandler(words, blackList);
+            comments.set(i, newComment.trim());
 
-            if (wordCorrection instanceof ToolsForIncorrectWords toolsForIncorrectWords) {
-                String newComment = toolsForIncorrectWords.commentsHandler(words, blackList);
-                comments.set(i, newComment.trim());
-            } else if (wordCorrection instanceof ToolsForRudeWords toolsForRudeWords) {
-                String newComment = toolsForRudeWords.commentsHandler(words, blackList);
-                comments.set(i, newComment.trim());
-            }
         }
     }
 }
