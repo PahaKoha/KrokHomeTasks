@@ -131,12 +131,6 @@ class ToolsForMenuCreationTest {
     }
 
     @Test
-    void isDishNullTest() {
-        Dish dish = null;
-        assertFalse(toolsForMenuCreation.isDishNull(dish));
-    }
-
-    @Test
     void filterByTheWhimsOfTheKing() {
         List<Dish> testList = List.of(dish3, dish4);
         List<Dish> result = toolsForMenuCreation.filterByTheWhimsOfTheKing(List.copyOf(dishList), dish -> dish.getCategory() == DishCategory.DESSERT);

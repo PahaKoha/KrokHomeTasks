@@ -68,9 +68,6 @@ public class ToolsForMenuCreation {
                 .collect(Collectors.toList());
     }
 
-    public boolean isDishNull(Dish dish) {
-        return dish != null;
-    }
 
     /**
      * Этот метод филтрует список с учетом "капризов короля"
