@@ -2,7 +2,7 @@ package Task9_Gerasimik_Pavel;
 
 import java.util.List;
 import java.util.Set;
-
+@FunctionalInterface
 public interface BlackListFilter {
 
     /**

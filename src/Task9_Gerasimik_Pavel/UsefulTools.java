@@ -4,6 +4,9 @@ import java.util.Arrays;
 import java.util.List;
 
 public class UsefulTools {
+    private UsefulTools() {
+    }
+
     public static List<String> getElementsFromComment(String comment) {
         String[] words = comment.split("(?=[\\p{P}\\s])|(?<=[\\p{P}\\s])");
         return Arrays.asList(words);
