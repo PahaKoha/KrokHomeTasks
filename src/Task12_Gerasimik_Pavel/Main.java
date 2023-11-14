@@ -16,9 +16,9 @@ public class Main {
         System.out.println(result1);
 
         boolean result2 = customTernaryOperator(car1,
-                str -> str.equals(car3),
-                str -> true,
-                str -> false
+                car -> cargt.equals(car3),
+                car -> true,
+                car -> false
         );
         System.out.println(result2);
 
