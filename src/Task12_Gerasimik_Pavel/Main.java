@@ -16,7 +16,7 @@ public class Main {
         System.out.println(result1);
 
         boolean result2 = customTernaryOperator(car1,
-                car -> cargt.equals(car3),
+                car -> car.equals(car3),
                 car -> true,
                 car -> false
         );
