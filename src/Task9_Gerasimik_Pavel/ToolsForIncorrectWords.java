@@ -23,7 +23,7 @@ public class ToolsForIncorrectWords implements WordHandler {
     private static String findSimilarWord(String elementFromComment, Set<String> dictionary) {
         for (String word : dictionary) {
             if (UsefulTools.isSameLength(elementFromComment, word) && isWordSimilar(elementFromComment, word)) {
-                return UsefulTools.replaceWordWithStars(elementFromComment);
+                return word;
             }
         }
         return elementFromComment;

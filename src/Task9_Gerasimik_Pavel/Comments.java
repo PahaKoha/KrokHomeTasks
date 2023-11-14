@@ -13,7 +13,6 @@ public class Comments {
         commentsList.add("Если бы я знал, какой ты пройдоха, никогда бы с тобой не общался!");
         commentsList.add("Я думаю, что молако прокисло!");
         commentsList.add("Этот инот просто имба!");
-        commentsList.add("Рассия свящинная нафа дершава");
         commentsList.add("Капец:(");
     }
 }
