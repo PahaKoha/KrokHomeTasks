@@ -9,7 +9,7 @@ import java.util.function.Predicate;
 
 /**
  * Этот сервис обрабатывает просто грубые слова.
- * @param <T> - формат комментариев, для десятого задания я использовал обычные строки, а также специальныый класс, еоторый хранил в себе комментарий.
+ * @param <T> - формат комментариев. Для десятого задания я использовал обычные строки, а также специальныый класс, который хранит в себе комментарий.
  */
 public class FirstTestService<T> implements BlackListFilter<T>, PredicateFactory {
     public Collection<String> filter (Set<T> comments, Set<String> blackList) {
