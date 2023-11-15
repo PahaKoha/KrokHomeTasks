@@ -20,17 +20,9 @@ public class SecondTestService<T> implements BlackListFilter<T>, PredicateFactor
 
     @Override
     public Predicate<String> createPredicateForBlackListFilter(Set<String> blackList) {
-        return str -> {
-            if (!blackList.contains(str) && !UsefulTools.isPunctuationOrSpace(str)) {
-                for (String word : blackList) {
-                    if (UsefulTools.isSameLength(str, word) && UsefulTools.isWordSimilar(str, word)) {
-                        return true;
-                    }
-                }
-            } else if (blackList.contains(str)) {
-                return true;
-            }
-            return false;
-        };
+        return str ->
+                blackList.contains(str) || !UsefulTools.isPunctuationOrSpace(str) &&
+                        blackList.stream()
+                                .anyMatch(word -> UsefulTools.isSameLength(str, word) && UsefulTools.isWordSimilar(str, word)); // не знаю что это, но среда разработки сама предложила
     }
 }
