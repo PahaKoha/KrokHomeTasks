@@ -13,10 +13,10 @@ public class UsefulTools {
 
     public static <T> void commentsOutputInConsole(Collection<T> comments) {
         for (T comment : comments) {
-            if (comment instanceof String) {
-                System.out.println(comment);
-            } else if (comment instanceof Comment) {
-                System.out.println(((Comment) comment).getLabel());
+            if (comment instanceof String strComment) {
+                System.out.println(strComment);
+            } else if (comment instanceof Comment com) {
+                System.out.println(com.getLabel());
             }
         }
     }

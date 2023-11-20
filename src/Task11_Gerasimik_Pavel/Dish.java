@@ -2,15 +2,16 @@ package Task11_Gerasimik_Pavel;
 
 import java.util.Comparator;
 import java.util.Objects;
+import java.util.Set;
 
 public class Dish {
     private String name;
-    private String ingredients;
+    private Set<String> ingredients;
     private DishCategory category;
     private int kingRating;
     private int peopleRating;
 
-    public Dish(String name, String ingredients, DishCategory category, int kingRating, int peopleRating) {
+    public Dish(String name, Set<String> ingredients, DishCategory category, int kingRating, int peopleRating) {
         this.name = name;
         this.ingredients = ingredients;
         this.category = category;
@@ -27,11 +28,11 @@ public class Dish {
         this.name = name;
     }
 
-    public String getIngredients() {
+    public Set<String> getIngredients() {
         return ingredients;
     }
 
-    public void setIngredients(String ingredients) {
+    public void setIngredients(Set<String> ingredients) {
         this.ingredients = ingredients;
     }
 
@@ -50,6 +51,8 @@ public class Dish {
     public void setKingRating(int kingRating) {
         if (kingRating >= 0 && kingRating <= 100) {
             this.kingRating = kingRating;
+        } else {
+            throw new IncorrectRatingValueException();
         }
     }
 
@@ -60,6 +63,8 @@ public class Dish {
     public void setPeopleRating(int peopleRating) {
         if (peopleRating >= 0 && peopleRating <= 100) {
             this.peopleRating = peopleRating;
+        } else {
+            throw new IncorrectRatingValueException();
         }
     }
 
@@ -68,7 +73,9 @@ public class Dish {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Dish dish = (Dish) o;
-        return kingRating == dish.kingRating && peopleRating == dish.peopleRating && Objects.equals(name, dish.name) && Objects.equals(ingredients, dish.ingredients) && Objects.equals(category, dish.category);
+        return kingRating == dish.kingRating && peopleRating == dish.peopleRating
+                && Objects.equals(name, dish.name) && Objects.equals(ingredients, dish.ingredients)
+                && Objects.equals(category, dish.category);
     }
 
     @Override
@@ -85,18 +92,5 @@ public class Dish {
                 ", kingRating=" + kingRating +
                 ", peopleRating=" + peopleRating +
                 '}';
-    }
-}
-
-class DishComparator implements Comparator<Dish> {
-    @Override
-    public int compare(Dish o1, Dish o2) {
-        int kingRatingComparison = o2.getKingRating() - o1.getKingRating();
-
-        if (kingRatingComparison == 0) {
-            return o2.getPeopleRating() - o1.getPeopleRating();
-        }
-
-        return kingRatingComparison;
     }
 }

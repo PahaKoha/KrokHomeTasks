@@ -1,84 +1,74 @@
 package Task11_Gerasimik_Pavel;
 
-import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class ToolsForMenuCreation {
     /**
-     * Проверяет, возможно ли приготовить блюда из имеющихся на кухнне ингредиентов
+     * Этот метод проверяет, может ли быть приготовлено блюдо с учетом отсутствующих ингредиентов на кухне.
      *
-     * @param dish        - блюдо
-     * @param ingredients - ингредиенты на кухне
-     * @return - я не знаю что тут пизать. True или False
+     * @param dish                         - блюдо с ингредиентами для проверки.
+     * @param ingredientsWitchNotOnKitchen - ингредиенты, которых нет на кухне.
+     * @return - если в set ingredientsWitchNotOnKitchen есть хотя бы один ингредиент из списка ингредиентов для блюда,
+     * то ворзвращает false, в противном случае - true.
      */
-    public boolean checkIngredients(Dish dish, Set<String> ingredients) {
-        List<String> stringsFromDish = Arrays.stream(dish.getIngredients().split("[,\\s]+")).toList();
-        return ingredients.containsAll(stringsFromDish);
+    private boolean checkIngredients(Dish dish, Set<String> ingredientsWitchNotOnKitchen) {
+        return dish.getIngredients().stream().noneMatch(ingredientsWitchNotOnKitchen::contains);
     }
 
     /**
-     * Этот метод возвращает List с блюдами, которые можно приготовить из ингредиентво на кухне.
+     * Этот метод составляет список из блюд, которые могут быть приготовлены сегодня.
      *
-     * @param dishListForToday - список блюд поваров, которые сегодян работатют
-     * @param ingredients      - ингредиенты на кухнне
-     * @param limit            - предел блюд для подачи королю
-     * @return - возвращает список блюд
+     * @param cooksAndTheirDishes          - список всех поваров и их блюд.
+     * @param ingredientsWitchNotOnKitchen - ингредиенты, которых нет на кухне.
+     * @return - возвращает set с блюдами, которые могут быть приготовлены сегодня.
      */
-    public List<Dish> createMenuForToday(List<Dish> dishListForToday, Set<String> ingredients, int limit) {
-        if (dishListForToday == null) {
-            return Collections.emptyList();
-        }
-        return dishListForToday.stream()
-                .filter(dish -> checkIngredients(dish, ingredients))
-                .sorted(new DishComparator()).limit(limit).collect(Collectors.toList());
-    }
-
-    /**
-     * Этот метод проверяет сегодняшний день недели и возвращает список поваров, которые смогут сегодня готовить
-     *
-     * @param cooksAndTheirDishes - map который хранит в себе поваров и их список их блюд
-     * @return - возвращает отфильтрованный список поворов, которые могу сегодня работать
-     */
-    public Map<Cook, List<Dish>> checkCookWorkDays(Map<Cook, List<Dish>> cooksAndTheirDishes) {
-        return cooksAndTheirDishes.entrySet().stream()
-                .filter(entry -> entry.getKey() != null && entry.getKey().getWorkDays().contains(DayOfWeek.MONDAY)) // выбрал рандомный день недели, чтобы тесты работали как надо.
-                .collect(Collectors.toMap(
-                        Map.Entry::getKey,
-                        Map.Entry::getValue
-                ));
-    }
-
-    /**
-     * Этот метод возвращает список блюд, которые могу приготовить повара сегодня
-     *
-     * @param cooksAndTheirDishes - map с поварами и списками их блюд
-     * @return - список блюд в соответствии с поворами, у которых сегодня рабочий день
-     */
-    public List<Dish> checkTheCooksListOfDishesForToday(Map<Cook, List<Dish>> cooksAndTheirDishes) {
+    public Set<Dish> createMenuForToday(Map<Cook, Set<Dish>> cooksAndTheirDishes, Set<String> ingredientsWitchNotOnKitchen) {
         if (cooksAndTheirDishes == null) {
-            return Collections.emptyList();
+            return Collections.emptySet();
         }
-        return cooksAndTheirDishes.values().stream()
-                .filter(Objects::nonNull)
-                .flatMap(List::stream)
-                .filter(Objects::nonNull)
-                .sorted(new DishComparator())
-                .collect(Collectors.toList());
+        return checkTheCooksListOfDishesForToday(cooksAndTheirDishes).stream()
+                .filter(dish -> checkIngredients(dish, ingredientsWitchNotOnKitchen))
+                .collect(Collectors.toCollection(() -> new TreeSet<>(new DishComparator())));
+    }
+
+    /**
+     * @param cooksAndTheirDishes - список всех поваров и их блюд.
+     * @return - возвращает список поваров, которые могут работать в этот день.
+     */
+    private Set<Cook> setWithCooksWhichWorkToday(Map<Cook, Set<Dish>> cooksAndTheirDishes) {
+        return cooksAndTheirDishes.keySet().stream()
+                .filter(key -> key != null && key.getWorkDays().contains(LocalDate.now().getDayOfWeek()))
+                .collect(Collectors.toSet());
+    }
+
+    /**
+     * @param cooksAndTheirDishes - список всех поваров и их блюд.
+     * @return - возвращает объединенный сет из блюд, которые могут приготовить повара сегодня.
+     */
+    private Set<Dish> checkTheCooksListOfDishesForToday(Map<Cook, Set<Dish>> cooksAndTheirDishes) {
+        if (cooksAndTheirDishes == null) {
+            return Collections.emptySet();
+        }
+        return cooksAndTheirDishes.entrySet().stream()
+                .filter(entry -> setWithCooksWhichWorkToday(cooksAndTheirDishes).contains(entry.getKey()))
+                .flatMap(entry -> entry.getValue().stream())
+                .collect(Collectors.toSet());
     }
 
 
     /**
-     * Этот метод филтрует список с учетом "капризов короля"
-     *
-     * @param menu      - уже составленное меню
-     * @param predicate - предикат для обработки того или иного "каприза"
-     * @return - меню с учетом "капризов"
+     * @param menu - составленное меню без учета "капризов" короля.
+     * @param predicate - предикат для преобразования меню с учетом капризов кораля.
+     * @param limit - максимальное кол-во блюд.
+     * @return - возвращает отфильтрованное меню.
      */
-    public List<Dish> filterByTheWhimsOfTheKing(List<Dish> menu, Predicate<Dish> predicate) {
+    public Set<Dish> filterByTheWhimsOfTheKing(Set<Dish> menu, Predicate<Dish> predicate, int limit) {
         return menu.stream().filter(predicate)
-                .collect(Collectors.toList());
+                .sorted(new DishComparator())
+                .limit(limit)
+                .collect(Collectors.toSet());
     }
-
 }

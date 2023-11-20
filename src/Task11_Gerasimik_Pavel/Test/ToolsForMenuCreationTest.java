@@ -1,139 +1,75 @@
 package Task11_Gerasimik_Pavel.Test;
 
-import Task11_Gerasimik_Pavel.Cook;
-import Task11_Gerasimik_Pavel.Dish;
-import Task11_Gerasimik_Pavel.DishCategory;
-import Task11_Gerasimik_Pavel.ToolsForMenuCreation;
+import Task11_Gerasimik_Pavel.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.DayOfWeek;
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ToolsForMenuCreationTest {
-    private Cook cook1;
-    private Cook cook2;
-    private Dish dish1;
-    private Dish dish2;
-    private Dish dish3;
-    private Dish dish4;
-    private Set<String> ingredients;
-    private List<Dish> dishList;
-    private ToolsForMenuCreation toolsForMenuCreation;
-    private Map<Cook, List<Dish>> mapWithCooksAndTheirDishes;
+    ToolsForMenuCreation toolsForMenuCreation;
+    Cook cook1;
+    Cook cook2;
+    Cook cook3;
+    Cook cook4;
+    Cook cook5;
+    Cook cook6;
+    Dish dish1;
+    Dish dish2;
+    Dish dish3;
+    Dish dish4;
+    Dish dish5;
+    Set<String> ingredientsWitchNotOnKitchen;
+    Map<Cook, Set<Dish>> cooksAndTheirDishes;
 
     @BeforeEach
     void initialize() {
         toolsForMenuCreation = new ToolsForMenuCreation();
-        mapWithCooksAndTheirDishes = new HashMap<>();
-        cook1 = new Cook("Павел", new HashSet<>(Set.of(DayOfWeek.MONDAY, DayOfWeek.FRIDAY, DayOfWeek.SATURDAY, DayOfWeek.THURSDAY, DayOfWeek.TUESDAY, DayOfWeek.SUNDAY)));
-        cook2 = new Cook("Матвей", new HashSet<>(Set.of(DayOfWeek.THURSDAY, DayOfWeek.TUESDAY, DayOfWeek.SUNDAY)));
-        dish1 = new Dish("dish1", "соль, икра", DishCategory.MAIN_DISH, 43, 98);
-        dish2 = new Dish("dish2", "соль, помидоры, картошка, курица", DishCategory.MAIN_DISH, 67, 65);
-        dish3 = new Dish("dish3", "сахар, шоколад, бананы", DishCategory.DESSERT, 90, 34);
-        dish4 = new Dish("dish4", "картошка, курица", DishCategory.DESSERT, 43, 89);
-        ingredients = Set.of("соль", "икра", "помидоры", "курица", "картошка");
-        dishList = List.of(dish1, dish2, dish3, dish4);
-        mapWithCooksAndTheirDishes.put(cook1, new ArrayList<>(List.of(dish1, dish2)));
-        mapWithCooksAndTheirDishes.put(cook2, new ArrayList<>(List.of(dish3, dish4)));
+        cook1 = new Cook("Павел", new HashSet<>(Set.of(DayOfWeek.THURSDAY, DayOfWeek.MONDAY)));
+        cook2 = new Cook("Матвей", new HashSet<>(Set.of(DayOfWeek.SATURDAY, DayOfWeek.SUNDAY)));
+        cook3 = new Cook("Артем", new HashSet<>(Set.of(DayOfWeek.THURSDAY, DayOfWeek.TUESDAY)));
+        cook4 = new Cook("Всеволод", new HashSet<>(Set.of(DayOfWeek.WEDNESDAY, DayOfWeek.SUNDAY)));
+        cook5 = new Cook("Сергей", new HashSet<>(Set.of(DayOfWeek.SUNDAY, DayOfWeek.SATURDAY)));
+        cook6 = new Cook("Николай", new HashSet<>(Set.of(DayOfWeek.THURSDAY, DayOfWeek.MONDAY)));
+        dish1 = new Dish("Мороженное", Set.of("молоко", "сливки", "сахар"),
+                DishCategory.DESSERT, 100, 100);
+        dish2 = new Dish("Жаренная курица", Set.of("курица", "соль"),
+                DishCategory.MAIN_DISH, 45, 67);
+        dish3 = new Dish("фреш", Set.of("сок", "лёд"),
+                DishCategory.DESSERT, 56, 74);
+        dish4 = new Dish("Бананый в шокоаде", Set.of("бнаны", "шоколад", "сахар"),
+                DishCategory.DESSERT, 90, 80);
+        dish5 = new Dish("Золотое яблоко", Set.of("яблоки"),
+                DishCategory.DESSERT, 70, 67);
+        ingredientsWitchNotOnKitchen = new HashSet<>(Set.of("сок"));
+        cooksAndTheirDishes = new HashMap<>();
+        cooksAndTheirDishes.put(cook1, Set.of(dish1));
+        cooksAndTheirDishes.put(cook2, Set.of(dish3, dish2));
+        cooksAndTheirDishes.put(cook3, Set.of(dish3));
+        cooksAndTheirDishes.put(cook4, Set.of(dish2));
+        cooksAndTheirDishes.put(cook5, Set.of(dish1, dish3));
     }
 
     @Test
-    void checkIngredients() {
-        boolean result = toolsForMenuCreation.checkIngredients(dish1, ingredients);
-        assertTrue(result);
+    void createMenuForTodayTest() {
+        Set<Dish> dishSet = new TreeSet<>(new DishComparator());
+        dishSet.add(dish1);
+        dishSet.add(dish2);
+        assertEquals(dishSet, toolsForMenuCreation.createMenuForToday(cooksAndTheirDishes, ingredientsWitchNotOnKitchen));
     }
 
     @Test
-    void createMenuForTodayTestLimit() {
-        int limit = 2;
-        List<Dish> result = toolsForMenuCreation.createMenuForToday(dishList, ingredients, limit);
-
-        assertTrue(limit >= result.size());
+    void filterByTheWhimsOfTheKingTest() {
+        Set<Dish> testSet = new TreeSet<>(new DishComparator());
+        testSet.add(dish4);
+        testSet.add(dish1);
+        testSet.add(dish5);
+        Set<Dish> result = toolsForMenuCreation.filterByTheWhimsOfTheKing(Set.of(dish1, dish2, dish3, dish4, dish5),
+                dish -> dish.getCategory() == DishCategory.DESSERT, 3);
+        assertEquals(testSet, result);
     }
 
-    @Test
-    void createMenuForTodayTestMenuResult() {
-        List<Dish> lisForTest = new ArrayList<>(List.of(new Dish("dish2", "соль, помидоры, картошка, курица", DishCategory.MAIN_DISH, 67, 65)
-                , new Dish("dish1", "соль, икра", DishCategory.MAIN_DISH, 43, 98)
-                , new Dish("dish4", "картошка, курица", DishCategory.DESSERT, 43, 89)
-        ));
-
-        lisForTest.sort((o1, o2) -> {
-            int kingRatingComparison = o2.getKingRating() - o1.getKingRating();
-
-            if (kingRatingComparison == 0) {
-                return o2.getPeopleRating() - o1.getPeopleRating();
-            }
-
-            return kingRatingComparison;
-        });
-
-        assertEquals(lisForTest, toolsForMenuCreation.createMenuForToday(dishList, ingredients, 5));
-    }
-
-    @Test
-    void createMenuForTodayTestNullDishesList() {
-        List<Dish> result = toolsForMenuCreation.createMenuForToday(null, ingredients, 2);
-
-        assertNotNull(result);
-        assertTrue(result.isEmpty());
-    }
-
-
-    @Test
-    void checkCookWorkDaysTestResult() {
-        Map<Cook, List<Dish>> expectedMap = new HashMap<>();
-
-        expectedMap.put(cook1, new ArrayList<>(List.of(dish1, dish2)));
-
-        assertEquals(expectedMap, toolsForMenuCreation.checkCookWorkDays(mapWithCooksAndTheirDishes));
-    }
-
-    @Test
-    void checkCookWorkDaysTestNullValue() {
-        Map<Cook, List<Dish>> expectedMap = new HashMap<>();
-        expectedMap.put(null, null);
-        Map<Cook, List<Dish>> result = toolsForMenuCreation.checkCookWorkDays(expectedMap);
-
-        assertNotNull(result);
-        assertTrue(result.isEmpty());
-    }
-
-    @Test
-    void checkTheCooksListOfDishesForTodayTestResult() {
-        List<Dish> result = new ArrayList<>(List.of(dish1, dish2, dish3, dish4));
-
-        result.sort((o1, o2) -> {
-            int kingRatingComparison = o2.getKingRating() - o1.getKingRating();
-
-            if (kingRatingComparison == 0) {
-                return o2.getPeopleRating() - o1.getPeopleRating();
-            }
-
-            return kingRatingComparison;
-        });
-
-        assertEquals(result, toolsForMenuCreation.checkTheCooksListOfDishesForToday(mapWithCooksAndTheirDishes));
-    }
-
-    @Test
-    void checkTheCooksListOfDishesForTodayTestListByNull() {
-        Map<Cook, List<Dish>> expectedMap = new HashMap<>();
-        expectedMap.put(cook1, null);
-
-        List<Dish> result = toolsForMenuCreation.checkTheCooksListOfDishesForToday(expectedMap);
-
-        assertNotNull(result);
-        assertTrue(result.isEmpty());
-    }
-
-    @Test
-    void filterByTheWhimsOfTheKing() {
-        List<Dish> testList = List.of(dish3, dish4);
-        List<Dish> result = toolsForMenuCreation.filterByTheWhimsOfTheKing(List.copyOf(dishList), dish -> dish.getCategory() == DishCategory.DESSERT);
-        assertEquals(testList, result);
-    }
 }

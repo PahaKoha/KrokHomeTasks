@@ -11,7 +11,7 @@ public interface BlackListFilter<T> {
         List<String> filteredComments = new ArrayList<>();
 
         for (T comment : comments) {
-            String label = (comment instanceof String) ? (String) comment : ((Comment) comment).getLabel();
+            String label = (comment instanceof String stringComment) ? stringComment : ((Comment) comment).getLabel();
 
             String filteredComment = Arrays.stream(label.split(UsefulTools.regEx))
                     .map(word -> predicate.test(word) ? UsefulTools.replaceWordWithStars(word) : word)
