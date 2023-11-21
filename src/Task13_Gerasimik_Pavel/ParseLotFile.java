@@ -7,6 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ParseLotFile {
+    private ParseLotFile() {
+
+    }
+
     public static List<String> parseLotFile(String path) {
         List<String> lotInformationList = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(path))) {

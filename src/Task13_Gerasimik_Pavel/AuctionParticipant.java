@@ -11,14 +11,18 @@ public class AuctionParticipant implements Runnable {
     public AuctionParticipant(String name, AuctionLot lot) {
         this.name = name;
         this.lot = lot;
-        priceWhichUserCanStake = lot.getCurrentPrice() + randomPrice.nextInt(20000, 50000);
+        setPriceWhichUserCanStake();
     }
 
     @Override
     public void run() {
-        for (int i = 0; i < 1000000; i++) {
+        for (int i = 0; i < 100; i++) {
             lot.stake(priceWhichUserCanStake, name);
-            priceWhichUserCanStake = randomPrice.nextInt();
+            setPriceWhichUserCanStake();
         }
+    }
+
+    public void setPriceWhichUserCanStake() {
+        priceWhichUserCanStake = randomPrice.nextInt(lot.getMaxStake() - lot.getMinStake()) + lot.getMinStake();
     }
 }

@@ -1,5 +1,6 @@
 package Task12_Gerasimik_Pavel;
 
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -30,9 +31,20 @@ public class Main {
                 n -> n * 2
         );
         System.out.println(result3);
+
+        String test = "Hello";
+        Number result4 = customTernaryOperator(
+                test,
+                String::isBlank,
+                String::length,
+                String::hashCode
+        );
+        System.out.println(result4);
+
     }
 
-    public static <T, R> R customTernaryOperator(T value, Predicate<T> predicate, Function<T, R> trueResult, Function<T, R> falseResult) {
+    public static <T, R> R customTernaryOperator(T value, Predicate<T> predicate,
+                                                 Function<T, R> trueResult, Function<T, R> falseResult) {
         return predicate.test(value) ? trueResult.apply(value) : falseResult.apply(value);
     }
 }

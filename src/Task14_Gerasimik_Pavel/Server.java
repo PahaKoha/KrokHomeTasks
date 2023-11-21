@@ -2,6 +2,7 @@ package Task14_Gerasimik_Pavel;
 
 import java.net.*;
 import java.io.*;
+import java.time.LocalTime;
 import java.util.Scanner;
 
 public class Server {
@@ -14,9 +15,14 @@ public class Server {
             Scanner send = new Scanner(System.in);
             System.out.println("Chat already start!");
 
+
             while (in.hasNext()) {
                 System.out.println(in.nextLine());
-                String s = send.nextLine();
+                String s;
+                System.out.print("me: ");
+                do {
+                    s = send.nextLine();
+                } while (s.isEmpty());
                 out.println("server: " + s);
                 out.flush();
             }

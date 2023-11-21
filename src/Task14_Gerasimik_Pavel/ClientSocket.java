@@ -3,6 +3,7 @@ package Task14_Gerasimik_Pavel;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.time.LocalTime;
 import java.util.Scanner;
 
 public class ClientSocket {
@@ -12,14 +13,17 @@ public class ClientSocket {
              Scanner in = new Scanner(socket.getInputStream())) {
 
             Scanner send = new Scanner(System.in);
-            System.out.print("Введите ваше имя:");
+            System.out.print("Type your name:");
             String name = send.nextLine().trim();
             System.out.println("Chat already start!");
 
 
             while (true) {
                 System.out.print("me: ");
-                String words = send.nextLine();
+                String words;
+                do {
+                    words = send.nextLine();
+                } while (words.isEmpty());
                 out.println(name + ": " + words);
                 out.flush();
                 String s = in.nextLine();

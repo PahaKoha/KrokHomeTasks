@@ -8,13 +8,12 @@ import java.util.Set;
 
 public class ParseParticipantsFile {
     public static Set<String> participants = new HashSet<>();
-
     private ParseParticipantsFile() {
 
     }
-
     static {
-        try (BufferedReader reader = new BufferedReader(new FileReader("src/Task13_Gerasimik_Pavel/txtFiles/participants.txt"))) {
+        try (BufferedReader reader = new BufferedReader(
+                new FileReader("src/Task13_Gerasimik_Pavel/txtFiles/participants.txt"))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 participants.add(line);

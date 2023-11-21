@@ -34,7 +34,7 @@ public class Cook {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Cook cook = (Cook) o;
-        return Objects.equals(name, cook.name) && Objects.equals(workDays, cook.workDays);
+        return Objects.equals(name, cook.name);
     }
 
     @Override

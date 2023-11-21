@@ -1,13 +1,12 @@
 package Task11_Gerasimik_Pavel;
 
-import java.util.Comparator;
 import java.util.Objects;
 import java.util.Set;
 
 public class Dish {
-    private String name;
-    private Set<String> ingredients;
-    private DishCategory category;
+    private final String name;
+    private final Set<String> ingredients;
+    private final DishCategory category;
     private int kingRating;
     private int peopleRating;
 
@@ -24,24 +23,12 @@ public class Dish {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public Set<String> getIngredients() {
         return ingredients;
     }
 
-    public void setIngredients(Set<String> ingredients) {
-        this.ingredients = ingredients;
-    }
-
     public DishCategory getCategory() {
         return category;
-    }
-
-    public void setCategory(DishCategory category) {
-        this.category = category;
     }
 
     public int getKingRating() {
@@ -73,8 +60,7 @@ public class Dish {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Dish dish = (Dish) o;
-        return kingRating == dish.kingRating && peopleRating == dish.peopleRating
-                && Objects.equals(name, dish.name) && Objects.equals(ingredients, dish.ingredients)
+        return Objects.equals(name, dish.name) && Objects.equals(ingredients, dish.ingredients)
                 && Objects.equals(category, dish.category);
     }
 
