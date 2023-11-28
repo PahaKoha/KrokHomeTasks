@@ -2,8 +2,8 @@ package Task13_Gerasimik_Pavel;
 
 import java.time.*;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Objects;
-import java.util.Random;
 
 
 public class AuctionLot {
@@ -11,25 +11,21 @@ public class AuctionLot {
     private int currentPrice;
     private String currentUser;
     private final LocalTime endOfLot;
-    private final int maxStake;
-    private final int minStake;
-    private final Random random = new Random();
+    private static final Object lock = new Object();
 
-    public AuctionLot(LocalTime endOfLot, int maxStake, int minStake, String path) {
-        this.lotName = ParseLotFile.parseLotFile(path).get(0);
-        this.currentPrice = Integer.parseInt(ParseLotFile.parseLotFile(path).get(1));
+    public AuctionLot(LocalTime endOfLot, List<String> lotInformation) {
+        this.lotName = lotInformation.get(0);
+        this.currentPrice = Integer.parseInt(lotInformation.get(1));
         this.currentUser = null;
         this.endOfLot = endOfLot;
-        this.maxStake = maxStake;
-        this.minStake = minStake;
     }
 
     public synchronized void stake(int stakePrice, String newUser) {
-        if (isValidStake(newUser)) {
+        if (isValidStake(newUser, stakePrice)) {
             updateStake(stakePrice, newUser);
             printStakeInfo(newUser);
-            sleep();
         }
+
     }
 
     public int getCurrentPrice() {
@@ -44,12 +40,14 @@ public class AuctionLot {
         return currentUser;
     }
 
-    private boolean isValidStake(String newUser) {
-        return !endOfLot.isBefore(LocalTime.now()) && !Objects.equals(newUser, currentUser);
+    private boolean isValidStake(String newUser, int stakePrice) {
+        return currentPrice < stakePrice &&
+                !endOfLot.isBefore(LocalTime.now()) &&
+                !Objects.equals(newUser, currentUser);
     }
 
     private void updateStake(int stakePrice, String newUser) {
-        currentPrice += stakePrice;
+        currentPrice = stakePrice;
         currentUser = newUser;
     }
 
@@ -60,21 +58,5 @@ public class AuctionLot {
         System.out.println(UsefulTools.getClearOutputTime(LocalTime.now()) + ": Участник " + newUser
                 + " перебил текущую ставку! " + "Цена лота составляет " + UsefulTools.getFormatPrice(currentPrice)
                 + ".  ВРЕМЯ ДО КОНЦА ЛОТА: " + timeUntilEnd);
-    }
-
-    private void sleep() {
-        try {
-            Thread.sleep(random.nextInt(1000, 10000));
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public int getMaxStake() {
-        return maxStake;
-    }
-
-    public int getMinStake() {
-        return minStake;
     }
 }

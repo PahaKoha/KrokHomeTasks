@@ -23,6 +23,6 @@ public class AuctionParticipant implements Runnable {
     }
 
     public void setPriceWhichUserCanStake() {
-        priceWhichUserCanStake = randomPrice.nextInt(lot.getMaxStake() - lot.getMinStake()) + lot.getMinStake();
+        priceWhichUserCanStake = randomPrice.nextInt(100000, 10000000);
     }
 }

@@ -2,30 +2,32 @@ package Task14_Gerasimik_Pavel;
 
 import java.net.*;
 import java.io.*;
-import java.time.LocalTime;
 import java.util.Scanner;
 
-public class Server {
-    public static void main(String[] args) throws IOException {
-        try (ServerSocket serverSocket = new ServerSocket(8000);
-             Socket input = serverSocket.accept();
-             Scanner in = new Scanner(input.getInputStream());
-             PrintWriter out = new PrintWriter(input.getOutputStream())) {
+class Server {
+    private ServerSocket serverSocket;
 
-            Scanner send = new Scanner(System.in);
-            System.out.println("Chat already start!");
+    public Server(ServerSocket serverSocket) {
+        this.serverSocket = serverSocket;
+    }
 
+    public void startServer() {
+        try {
+            while (!serverSocket.isClosed()) {
+                Socket socket = serverSocket.accept();
+                System.out.println("New client connected");
+                ClientHandler clientHandler = new ClientHandler(socket);
 
-            while (in.hasNext()) {
-                System.out.println(in.nextLine());
-                String s;
-                System.out.print("me: ");
-                do {
-                    s = send.nextLine();
-                } while (s.isEmpty());
-                out.println("server: " + s);
-                out.flush();
+                Thread thread = new Thread(clientHandler);
+                thread.start();
             }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
+    }
+    public static void main(String[] args) throws IOException {
+        ServerSocket serverSocket = new ServerSocket(8000);
+        Server server = new Server(serverSocket);
+        server.startServer();
     }
 }

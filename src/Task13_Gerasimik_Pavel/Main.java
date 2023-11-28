@@ -1,18 +1,17 @@
 package Task13_Gerasimik_Pavel;
 
-import java.time.Instant;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.Set;
+
 
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {
-        AuctionLot auctionLot = new AuctionLot(LocalTime.now().plusSeconds(70),
-                50000, 20000, "src/Task13_Gerasimik_Pavel/txtFiles/lot.txt");
+        List<String> lotInformation = FileReader.getInformationFromFile("src/Task13_Gerasimik_Pavel/txtFiles/lot.txt");
+        AuctionLot auctionLot = new AuctionLot(LocalTime.now().plusSeconds(60), lotInformation);
 
         System.out.println(auctionLot.getLotName() + " " + UsefulTools.getFormatPrice(auctionLot.getCurrentPrice()));
-        Set<String> listWithFutureParticipants = ParseParticipantsFile.participants;
+        List<String> listWithFutureParticipants = FileReader.getInformationFromFile("src/Task13_Gerasimik_Pavel/txtFiles/participants.txt");
 
         List<Thread> registeredParticipants =
                 RegistrationParticipantForTheLot.registration(listWithFutureParticipants, auctionLot);
@@ -23,6 +22,7 @@ public class Main {
                 + auctionLot.getWinnerUserName()
                 + " забирает текущий лот за " + UsefulTools.getFormatPrice(auctionLot.getCurrentPrice()));
     }
+
 }
 
 
