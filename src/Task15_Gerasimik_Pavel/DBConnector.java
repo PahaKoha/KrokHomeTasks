@@ -4,7 +4,11 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class DBConnection {
+public class DBConnector {
+    private DBConnector() {
+
+    }
+
     private static final String JDBC_URL_PREFIX = "jdbc:h2:mem:./testDB";
     private static final String DB_NAME = "sa";
     private static final String DB_PASSWORD = "";

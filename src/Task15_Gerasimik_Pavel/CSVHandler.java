@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.util.*;
 
 public class CSVHandler {
+    private CSVHandler () {
+
+    }
     public static List<String> getLinesFromCSVFile(String path) {
         try (BufferedReader reader = new BufferedReader(
                 new FileReader(path))) {

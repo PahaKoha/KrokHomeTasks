@@ -1,37 +1,36 @@
 package Task16_Gerasimik_Pavel.SQLRequests;
 
-import Task16_Gerasimik_Pavel.DBConnection;
-
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class CreateTables {
-    public static void createPersonTable() {
-        try (Statement statement = DBConnection.getDbConnection().createStatement()) {
+public class TablesCreator {
+    public static void createPersonTable(Connection connection) {
+        try (Statement statement = connection.createStatement()) {
             String createTableRequest = "CREATE TABLE person (" +
                     "id INT PRIMARY KEY," +
                     "name VARCHAR(50) NOT NULL," +
                     "surname VARCHAR(50) NOT NULL," +
                     "phone_number VARCHAR(50) NOT NULL)";
             statement.executeUpdate(createTableRequest);
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static void createPetTable ()  {
-        try (Statement statement = DBConnection.getDbConnection().createStatement()) {
+    public static void createPetTable (Connection connection)  {
+        try (Statement statement = connection.createStatement()) {
             String createTableRequest = "CREATE TABLE pet (" +
                     "med_card_id INT PRIMARY KEY," +
                     "name VARCHAR(50) NOT NULL," +
                     "age VARCHAR(50) NOT NULL)";
             statement.executeUpdate(createTableRequest);
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
-    public static void createPersonPetTable()  {
-        try (Statement statement = DBConnection.getDbConnection().createStatement()) {
+    public static void createPersonPetTable(Connection connection)  {
+        try (Statement statement = connection.createStatement()) {
             String createTableRequest = "CREATE TABLE person_pet (" +
                     "person_id INT," +
                     "pet_med_card_id INT," +
@@ -40,7 +39,7 @@ public class CreateTables {
                     "FOREIGN KEY (pet_med_card_id) REFERENCES pet(med_card_id) ON DELETE CASCADE " +
                     ")";
             statement.executeUpdate(createTableRequest);
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }

@@ -1,16 +1,21 @@
 package Task15_Gerasimik_Pavel.SQLRequest;
 
-import Task15_Gerasimik_Pavel.DBConnection;
+import Task15_Gerasimik_Pavel.DBConnector;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public class GetInformation {
-    public static List<String> selectPersonPetData()  {
-        try (Statement statement = DBConnection.getDbConnection().createStatement()) {
+public class InformationGetter {
+    private InformationGetter () {
+
+    }
+    public static List<String> selectPersonPetData(Connection connection)  {
+        try (Statement statement = connection.createStatement()) {
             String SQLRequest = "SELECT " +
                     "person.id AS person_id, " +
                     "person.name AS person_name, " +
@@ -40,7 +45,7 @@ public class GetInformation {
                 }
                 return information;
             }
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }

@@ -1,33 +1,36 @@
 package Task15_Gerasimik_Pavel;
 
-import Task15_Gerasimik_Pavel.SQLRequest.CreateTables;
-import Task15_Gerasimik_Pavel.SQLRequest.GetInformation;
-import Task15_Gerasimik_Pavel.SQLRequest.InsertToTable;
+import Task15_Gerasimik_Pavel.SQLRequest.TableCreator;
+import Task15_Gerasimik_Pavel.SQLRequest.InformationGetter;
+import Task15_Gerasimik_Pavel.SQLRequest.TableDataInserter;
+import Task16_Gerasimik_Pavel.DBConnector;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
-        List<String> listWithInformationAboutPersonsAndTheirPest =
-                CSVHandler.getLinesFromCSVFile("src/Task15_Gerasimik_Pavel/informationAboutPersonAndTheirPet.txt");
+        try (Connection connection = DBConnector.getDbConnection()) {
+            List<String> listWithInformationAboutPersonsAndTheirPest =
+                    CSVHandler.getLinesFromCSVFile("src/Task15_Gerasimik_Pavel/informationAboutPersonAndTheirPet.txt");
 
-        CreateTables.createPersonTable();
-        CreateTables.createPetTable();
-        CreateTables.createPersonPetTable();
+            TableCreator.createPersonTable(connection);
+            TableCreator.createPetTable(connection);
+            TableCreator.createPersonPetTable(connection);
 
-        for (String str : listWithInformationAboutPersonsAndTheirPest) {
-            InsertToTable.insertPersonToPersonTable(UsefulTools.parseLinesFromCSVFile(str));
-        }
-        for (String str : listWithInformationAboutPersonsAndTheirPest) {
-            InsertToTable.insertPetToPetTable(UsefulTools.parseLinesFromCSVFile(str));
-        }
-        for (String str : listWithInformationAboutPersonsAndTheirPest) {
-            InsertToTable.insertPersonPetRelation(UsefulTools.parseLinesFromCSVFile(str));
-        }
+            for (String str : listWithInformationAboutPersonsAndTheirPest) {
+                TableDataInserter.insertPersonToPersonTable(UsefulTools.parseLinesFromCSVFile(str), connection);
+            }
+            for (String str : listWithInformationAboutPersonsAndTheirPest) {
+                TableDataInserter.insertPetToPetTable(UsefulTools.parseLinesFromCSVFile(str), connection);
+            }
+            for (String str : listWithInformationAboutPersonsAndTheirPest) {
+                TableDataInserter.insertPersonPetRelation(UsefulTools.parseLinesFromCSVFile(str), connection);
+            }
 
-        GetInformation.selectPersonPetData().forEach(str -> System.out.println(str + "-------------"));
+            InformationGetter.selectPersonPetData(connection).forEach(str -> System.out.println(str + "-------------"));
+        }
     }
-
 
 }
